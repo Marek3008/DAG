@@ -14,9 +14,9 @@ std::vector<Vertex*> Vertex::GetEdges() const {
 }
 
 void Vertex::PrintEdges() const {
-    std::cout << "\tVertex " << this->value << ":" << std::endl;
+    std::cout << "  Vertex " << this->value << ":" << std::endl;
 
     for(auto edge : this->edges){
-        std::cout << "\t\t" << edge->GetValue() << std::endl;
+        std::cout << "    " << edge->GetValue() << std::endl;
     }
 }

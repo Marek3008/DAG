@@ -2,8 +2,9 @@
 #include <iostream>
 
 void Graph::Insert(int v){
-    Vertex* vertex = new Vertex(v);
+    if(GetVertex(v) != nullptr) return; 
 
+    Vertex* vertex = new Vertex(v);
     this->vertices.push_back(vertex);
 }
 
@@ -30,16 +31,22 @@ std::vector<Vertex*> Graph::GetVertices() const {
     return this->vertices;
 }
 
+int Graph::GetVerticesCount() const {
+    return this->vertices.size();
+}
+
 void Graph::PrintVertices() const {
     std::cout << "Vertices:" << std::endl;
 
     for(auto vertex : this->vertices){
         std::cout << vertex->GetValue() << std::endl;
     }
+
+    std::cout << "Count: " << this->GetVerticesCount() << std::endl << std::endl;
 }
 
 void Graph::PrintEdges() const {
-    std::cout << "Edges:" << std::endl;
+    std::cout << "Oriented edges: (from -> to)" << std::endl;
 
     for(auto vertex : this->vertices){
         vertex->PrintEdges();

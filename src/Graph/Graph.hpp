@@ -14,6 +14,8 @@ class Graph{
 
         Vertex* GetVertex(int v) const;
         std::vector<Vertex*> GetVertices() const;
+        int GetVerticesCount() const;
+        
         void PrintVertices() const;
         void PrintEdges() const;
 };
