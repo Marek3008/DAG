@@ -35,8 +35,13 @@ int main(void){
 
     create_graph(g, edges);
 
-    g->PrintVertices();
-    g->PrintEdges();
+    //g->PrintVertices();
+    //g->PrintEdges();
+
+    std::cout << (g->IsDAG() ? "Je to DAG" : "Nie je to DAG") << std::endl;
+
+    std::cout << g->GetEdgesCount() << std::endl;
+    std::cout << g->GetExpectedEdgesCount() << std::endl;
 
     return 0;
 }

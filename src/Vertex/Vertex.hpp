@@ -10,7 +10,7 @@ class Vertex{
     private:
         int value;
         State state;
-        std::vector<Vertex*> edges;
+        std::vector<Vertex*> neighbors;
 
     public:
         Vertex(int value) : value(value), state(UNVISITED) {}
@@ -20,7 +20,7 @@ class Vertex{
 
         int GetValue() const;
         State GetState() const;
-        std::vector<Vertex*> GetEdges() const;
+        std::vector<Vertex*> GetNeighbors() const;
         
-        void PrintEdges() const;
+        void PrintNeighbors() const;
 };

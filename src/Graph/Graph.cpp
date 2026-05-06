@@ -19,6 +19,12 @@ bool Graph::AddEdge(int v1, int v2){
     return true;
 }
 
+void Graph::ResetStates(){
+    for(auto vertex : this->vertices){
+        vertex->SetState(Vertex::UNVISITED);
+    }
+}
+
 Vertex* Graph::GetVertex(int v) const {
     for(auto vertex : this->vertices){
         if(vertex->GetValue() == v) return vertex;
@@ -35,6 +41,44 @@ int Graph::GetVerticesCount() const {
     return this->vertices.size();
 }
 
+int Graph::GetEdgesCount() const {
+    int count = 0;
+    
+    for(auto vertex : this->vertices){
+        count += vertex->GetNeighbors().size();
+    }
+
+    return count;
+}
+
+bool Graph::HasCycle(Vertex* vertex){
+    vertex->SetState(Vertex::VISITING);
+
+    for(Vertex* neighbor : vertex->GetNeighbors()) {
+        if(neighbor->GetState() == Vertex::VISITING) return true;
+        if(neighbor->GetState() == Vertex::UNVISITED && HasCycle(neighbor)) return true;
+    }
+
+    vertex->SetState(Vertex::VISITED);
+    return false;
+}
+
+bool Graph::IsDAG(){
+    this->ResetStates();
+
+    for(Vertex* v : this->vertices) {
+        if(v->GetState() == Vertex::UNVISITED && this->HasCycle(v)) return false;
+    }
+    return true;
+}
+
+int Graph::GetExpectedEdgesCount() const {
+    int n = this->GetVerticesCount();
+    int ec = (n * (n - 1)) / 2;
+    
+    return ec;
+}
+
 void Graph::PrintVertices() const {
     std::cout << "Vertices:" << std::endl;
 
@@ -49,6 +93,6 @@ void Graph::PrintEdges() const {
     std::cout << "Oriented edges: (from -> to)" << std::endl;
 
     for(auto vertex : this->vertices){
-        vertex->PrintEdges();
+        vertex->PrintNeighbors();
     }
 }
