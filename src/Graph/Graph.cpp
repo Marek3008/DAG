@@ -1,5 +1,6 @@
 #include "Graph.hpp"
 #include <iostream>
+#include <algorithm>
 
 void Graph::Insert(int v){
     if(GetVertex(v) != nullptr) return; 
@@ -53,8 +54,9 @@ int Graph::GetEdgesCount() const {
 
 bool Graph::HasCycle(Vertex* vertex){
     vertex->SetState(Vertex::VISITING);
+    std::vector<Vertex*> neighbors = vertex->GetNeighbors();
 
-    for(Vertex* neighbor : vertex->GetNeighbors()) {
+    for(auto neighbor : neighbors) {
         if(neighbor->GetState() == Vertex::VISITING) return true;
         if(neighbor->GetState() == Vertex::UNVISITED && HasCycle(neighbor)) return true;
     }
@@ -66,10 +68,56 @@ bool Graph::HasCycle(Vertex* vertex){
 bool Graph::IsDAG(){
     this->ResetStates();
 
-    for(Vertex* v : this->vertices) {
-        if(v->GetState() == Vertex::UNVISITED && this->HasCycle(v)) return false;
+    for(auto vertex : this->vertices) {
+        if(vertex->GetState() == Vertex::UNVISITED && this->HasCycle(vertex)) return false;
     }
+    
     return true;
+}
+
+void Graph::TopologicalSortHelper(Vertex* v, std::vector<Vertex*>& order) {
+    v->SetState(Vertex::VISITING);
+    for (Vertex* neighbor : v->GetNeighbors()) {
+        if (neighbor->GetState() == Vertex::UNVISITED) {
+            TopologicalSortHelper(neighbor, order);
+        }
+    }
+    v->SetState(Vertex::VISITED);
+    order.push_back(v);
+}
+
+void Graph::TopologicalSort() {
+    this->ResetStates();
+
+    for (Vertex* v : this->vertices) {
+        if (v->GetState() == Vertex::UNVISITED) {
+            TopologicalSortHelper(v, this->order);
+        }
+    }
+
+    std::reverse(this->order.begin(), this->order.end());
+}
+
+void Graph::MakeCompleteDAG(){
+    this->TopologicalSort(); 
+    int n = this->order.size();
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            Vertex* u = this->order[i];
+            Vertex* v = this->order[j];
+
+            bool exists = false;
+            for(auto neighbor : u->GetNeighbors()){
+                if(neighbor == v) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) u->AddEdge(v);
+        }
+    }
 }
 
 int Graph::GetExpectedEdgesCount() const {
@@ -95,4 +143,14 @@ void Graph::PrintEdges() const {
     for(auto vertex : this->vertices){
         vertex->PrintNeighbors();
     }
+}
+
+void Graph::PrintTopologicalOrder(){
+    std::cout << "Topological order: " << std::endl;
+
+    for(auto vertex : this->order){
+        std::cout << vertex->GetValue() << " ";
+    }
+
+    std::cout << std::endl;
 }

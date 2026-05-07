@@ -28,6 +28,18 @@ void create_graph(Graph* g, const std::vector<std::pair<int, int>>& edges){
     }
 }
 
+void write_completeDAG_to_file(Graph* g, const std::string file_name){
+    std::ofstream file(file_name);
+
+    g->MakeCompleteDAG();
+
+    for(auto vertex : g->GetVertices()){
+        for(auto neigbor : vertex->GetNeighbors()){
+            file << vertex->GetValue() << " " << neigbor->GetValue() << std::endl;
+        }
+    }
+}
+
 int main(void){
     Graph* g = new Graph();
     
@@ -35,13 +47,16 @@ int main(void){
 
     create_graph(g, edges);
 
-    //g->PrintVertices();
-    //g->PrintEdges();
+    std::cout << (g->IsDAG() ? "Zadaný graf je DAG" : "Zadaný graf NIE je DAG") << std::endl;
+    std::cout << "Počet vrcholov je " << g->GetVerticesCount() << " a počet hrán je " << g->GetEdgesCount() << std::endl;
+    std::cout << "Očakávaný počet hrán (v prípade, že je to DAG) je " << g->GetExpectedEdgesCount() << std::endl;
 
-    std::cout << (g->IsDAG() ? "Je to DAG" : "Nie je to DAG") << std::endl;
+    if(g->IsDAG()){        
+        write_completeDAG_to_file(g, "output.txt");
 
-    std::cout << g->GetEdgesCount() << std::endl;
-    std::cout << g->GetExpectedEdgesCount() << std::endl;
-
+        std::cout << std::endl << "DAG:" << std::endl;
+        std::cout << "Počet vrcholov je" << g->GetVerticesCount() << " a počet hrán je " << g->GetEdgesCount() << std::endl;
+    }
+    
     return 0;
 }
