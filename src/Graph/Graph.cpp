@@ -2,6 +2,13 @@
 #include <iostream>
 #include <algorithm>
 
+
+Graph::~Graph(){
+    for(auto vertex : this->vertices){
+        delete vertex;
+    }
+}
+
 void Graph::Insert(int v){
     if(GetVertex(v) != nullptr) return; 
 
@@ -14,6 +21,10 @@ bool Graph::AddEdge(int v1, int v2){
     Vertex* vertex2 = GetVertex(v2);
 
     if(vertex1 == nullptr || vertex2 == nullptr) return false;
+
+    for(auto neighbor : vertex1->GetNeighbors()){
+        if(neighbor == vertex2) return false;
+    }
 
     vertex1->AddEdge(vertex2);
 
@@ -75,24 +86,23 @@ bool Graph::IsDAG(){
     return true;
 }
 
-void Graph::TopologicalSortHelper(Vertex* v, std::vector<Vertex*>& order) {
-    v->SetState(Vertex::VISITING);
-    for (Vertex* neighbor : v->GetNeighbors()) {
-        if (neighbor->GetState() == Vertex::UNVISITED) {
-            TopologicalSortHelper(neighbor, order);
-        }
+void Graph::TopologicalSortHelper(Vertex* vertex, std::vector<Vertex*>& order) {
+    vertex->SetState(Vertex::VISITING);
+    
+    for(Vertex* neighbor : vertex->GetNeighbors()){
+        if(neighbor->GetState() == Vertex::UNVISITED) TopologicalSortHelper(neighbor, order);
     }
-    v->SetState(Vertex::VISITED);
-    order.push_back(v);
+    
+    vertex->SetState(Vertex::VISITED);
+    order.push_back(vertex);
 }
 
 void Graph::TopologicalSort() {
+    this->order.clear();
     this->ResetStates();
 
-    for (Vertex* v : this->vertices) {
-        if (v->GetState() == Vertex::UNVISITED) {
-            TopologicalSortHelper(v, this->order);
-        }
+    for(Vertex* vertex : this->vertices){
+        if(vertex->GetState() == Vertex::UNVISITED) TopologicalSortHelper(vertex, this->order);
     }
 
     std::reverse(this->order.begin(), this->order.end());
@@ -102,8 +112,8 @@ void Graph::MakeCompleteDAG(){
     this->TopologicalSort(); 
     int n = this->order.size();
 
-    for (int i = 0; i < n; i++) {
-        for (int j = i + 1; j < n; j++) {
+    for(int i = 0; i < n; i++){
+        for(int j = i + 1; j < n; j++){
             Vertex* u = this->order[i];
             Vertex* v = this->order[j];
 
@@ -115,7 +125,7 @@ void Graph::MakeCompleteDAG(){
                 }
             }
 
-            if (!exists) u->AddEdge(v);
+            if(!exists) u->AddEdge(v);
         }
     }
 }

@@ -1,3 +1,5 @@
 main
 *.zip
 output.txt
+docs
+doxygen_warnings.log

@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @brief Entry point for the Graph Analysis project.
+ * @details This program demonstrates DAG detection, topological sorting, 
+ * and the conversion of a directed graph into a complete DAG.
+ */
+
 #include "src/Graph/Graph.hpp"
 #include <iostream>
 #include <fstream>
@@ -55,8 +62,10 @@ int main(void){
         write_completeDAG_to_file(g, "output.txt");
 
         std::cout << std::endl << "DAG:" << std::endl;
-        std::cout << "Počet vrcholov je" << g->GetVerticesCount() << " a počet hrán je " << g->GetEdgesCount() << std::endl;
+        std::cout << "Počet vrcholov je " << g->GetVerticesCount() << " a počet hrán je " << g->GetEdgesCount() << std::endl;
     }
+
+    delete g;
     
     return 0;
 }

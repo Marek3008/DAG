@@ -1,0 +1,36 @@
+# --- Project Info ---
+PROJECT_NAME           = "DAG"
+PROJECT_NUMBER         = 1.0
+OUTPUT_DIRECTORY       = docs
+CREATE_SUBDIRS         = NO
+OUTPUT_LANGUAGE        = English
+
+# --- Input Configuration ---
+# This tells Doxygen to look in the current folder and all subfolders
+INPUT                  = . 
+RECURSIVE              = YES
+FILE_PATTERNS          = *.cpp *.hpp *.h *.md
+
+# --- Extraction Settings ---
+# Important: Setting these to YES ensures your private helpers are documented
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# --- Warning & Error Logging ---
+# Keeps the terminal output clean but tells you if you missed a comment
+QUIET                  = NO
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_LOGFILE           = doxygen_warnings.log
+
+# --- HTML Output Settings ---
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+# Adds a nice navigation sidebar
+GENERATE_TREEVIEW      = YES 
+# Makes the search bar work without a server
+SEARCHENGINE           = YES
+
+# --- LaTeX / PDF (Usually set to NO to save time) ---
+GENERATE_LATEX         = NO
