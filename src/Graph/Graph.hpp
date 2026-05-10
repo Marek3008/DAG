@@ -3,16 +3,14 @@
 #include "../Vertex/Vertex.hpp"
 #include <vector>
 
-
 /**
  * @class Graph
  * @brief Represents a directed graph and provides algorithms for DAG analysis and topological sorting.
  */
-class Graph{
+class Graph {
     private:
-        std::vector<Vertex*> vertices;
-        std::vector<Vertex*> order;
-
+        std::vector<Vertex*> vertices; ///< Internal storage for all vertices.
+        std::vector<Vertex*> order;    ///< Storage for the calculated topological order.
         
         /**
          * @brief Helper function that performs a Depth First Search to detect cycles.
@@ -23,15 +21,17 @@ class Graph{
         
         /**
          * @brief Recursive helper for the topological sort algorithm.
-         * @param v The current vertex being visited.
+         * @param vertex The current vertex being visited.
          * @param order Reference to the vector where the sort order is being constructed.
          */
         void TopologicalSortHelper(Vertex* vertex, std::vector<Vertex*>& order);
 
     public:
+        /**
+         * @brief Destructor that safely deletes all dynamically allocated Vertex objects.
+         */
         ~Graph();
 
-        
         /**
          * @brief Adds a directed edge between two existing vertices.
          * @param v1 The value of the source vertex.
@@ -80,13 +80,43 @@ class Graph{
          */
         int GetExpectedEdgesCount() const;
         
-        
+        /**
+         * @brief Finds and returns a pointer to a vertex with the specified value.
+         * @param v The value to search for.
+         * @return Pointer to the Vertex if found, nullptr otherwise.
+         */
         Vertex* GetVertex(int v) const;
+
+        /**
+         * @brief Retrieves the list of all vertices currently in the graph.
+         * @return A vector of pointers to the graph's vertices.
+         */
         std::vector<Vertex*> GetVertices() const;
+
+        /**
+         * @brief Gets the total number of vertices in the graph.
+         * @return Integer count of vertices.
+         */
         int GetVerticesCount() const;
+
+        /**
+         * @brief Gets the total number of directed edges in the graph.
+         * @return Integer count of edges.
+         */
         int GetEdgesCount() const;
 
+        /**
+         * @brief Prints the values of all vertices and the total count to standard output.
+         */
         void PrintVertices() const;
+
+        /**
+         * @brief Prints all oriented edges (from -> to) for each vertex in the graph.
+         */
         void PrintEdges() const;
+
+        /**
+         * @brief Prints the most recently calculated topological order to standard output.
+         */
         void PrintTopologicalOrder();
 };

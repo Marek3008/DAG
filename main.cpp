@@ -10,6 +10,11 @@
 #include <fstream>
 
 
+/**
+ * @brief Processes an input file to extract vertex pairs representing edges.
+ * @param file_name The name of the input text file.
+ * @return A vector of integer pairs, where each pair represents a directed edge (from, to).
+ */
 std::vector<std::pair<int, int>> process_file(const std::string file_name){
     std::ifstream file(file_name);
     
@@ -23,6 +28,11 @@ std::vector<std::pair<int, int>> process_file(const std::string file_name){
     return edges;
 }
 
+/**
+ * @brief Populates a Graph object with vertices and edges from a list.
+ * @param g Pointer to the Graph instance.
+ * @param edges A vector of pairs representing the edges to be inserted.
+ */
 void create_graph(Graph* g, const std::vector<std::pair<int, int>>& edges){
     for(const auto& edge : edges){
         int start = edge.first;
@@ -35,7 +45,12 @@ void create_graph(Graph* g, const std::vector<std::pair<int, int>>& edges){
     }
 }
 
-void write_completeDAG_to_file(Graph* g, const std::string file_name){
+/**
+ * @brief Converts the graph into a complete DAG and writes the resulting edges to a file.
+ * @param g Pointer to the Graph instance.
+ * @param file_name The name of the output file.
+ */
+void write_completeDAG_to_file(Graph* g, std::string file_name){
     std::ofstream file(file_name);
 
     g->MakeCompleteDAG();
@@ -47,6 +62,13 @@ void write_completeDAG_to_file(Graph* g, const std::string file_name){
     }
 }
 
+
+/**
+ * @brief The main execution loop of the program.
+ * @details Handles file I/O, graph construction, cycle validation, 
+ * and outputs results to the console and external files.
+ * @return 0 on successful execution.
+ */
 int main(void){
     Graph* g = new Graph();
     
